@@ -12,10 +12,14 @@ const AppNavigation = () => {
   return (
     <AuthStack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
         gestureEnabled: true,
       }}>
-      <AuthStack.Screen name="home" component={HomeScreen} />
+      <AuthStack.Screen
+        name="home"
+        options={{title: 'Películas'}}
+        component={HomeScreen}
+      />
     </AuthStack.Navigator>
   );
 };
