@@ -7,8 +7,9 @@ export const HEIGHT = SIZE * 2 - 95;
 
 export const homeSyles = StyleSheet.create({
   wrapper: {
-    padding: 5,
+    paddingHorizontal: 5,
     marginBottom: 30,
+    marginTop: 10,
   },
   wrapperImageContainer: {
     borderRadius: 10,
@@ -43,5 +44,10 @@ export const homeSyles = StyleSheet.create({
   },
   voteAverage: {
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  star: {
+    width: 20,
+    height: 20,
   },
 });

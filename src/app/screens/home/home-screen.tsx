@@ -1,35 +1,39 @@
 import React from 'react';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
-import {Container} from '@components/screen/screen.component';
-import {HEIGHT, homeSyles, SIZE} from '@screens/home/home-styles';
+import {Container} from '../../shared/components/screen/screen.component';
+import {homeSyles} from '@screens/home/home-styles';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
-  const styles = homeSyles;
+  const navigation = useNavigation();
+
+  const goToDetail = () => {
+    navigation.navigate('detail');
+  };
 
   const renderMovies = ({item}) => {
     return (
-      <TouchableOpacity
-        style={styles.wrapper}
-        onPress={() => {
-          console.log('Press');
-        }}>
-        <View style={styles.card}>
+      <TouchableOpacity style={homeSyles.wrapper} onPress={goToDetail}>
+        <View style={homeSyles.card}>
           <Image
-            style={styles.wrapperImageContainer}
+            style={homeSyles.wrapperImageContainer}
             source={{
               uri:
                 'https://image.tmdb.org/t/p/w500/3ombg55JQiIpoPnXYb2oYdr6DtP.jpg',
             }}
           />
-          <View style={styles.overlay}>
+          <View style={homeSyles.overlay}>
             <View>
-              <Text style={styles.text}>{'Guasón'}</Text>
+              <Text style={homeSyles.text}>{'Guasón'}</Text>
             </View>
-            <View style={styles.overlayContainer}>
-              <Text style={styles.text}>{'04-Oct-2019'}</Text>
-              <View style={styles.voteAverage}>
-                {/*<Icon type={'material'} name="star-border" color="#BF9022" />*/}
-                <Text style={styles.text}>{8.5}</Text>
+            <View style={homeSyles.overlayContainer}>
+              <Text style={homeSyles.text}>{'04-Oct-2019'}</Text>
+              <View style={homeSyles.voteAverage}>
+                <Image
+                  style={homeSyles.star}
+                  source={require('@images/star.png')}
+                />
+                <Text style={homeSyles.text}>{8.5}</Text>
               </View>
             </View>
           </View>
@@ -39,7 +43,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <Container>
+    <Container unsafe>
       <FlatList
         numColumns={2}
         showsVerticalScrollIndicator={false}
