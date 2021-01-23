@@ -13,21 +13,29 @@ import {useNavigation} from '@react-navigation/native';
 import {connect} from 'react-redux';
 import {getMovies} from '@shared/services/movies-service';
 import {IMovie} from '@shared/interfaces/movie-interface';
+import {setCurrentMovie} from '@stores/movies/home-action';
 
 const HomeScreen = (props: any) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    props.fetchMovies();
+    props.fetchMovies(props.listMovies.page);
   }, []);
 
-  const goToDetail = () => {
+  const goToDetail = (movie: IMovie) => {
+    props.currentMovie(movie);
     navigation.navigate('detail');
+  };
+
+  const paginate = () => {
+    props.fetchMovies(props.listMovies.page + 1);
   };
 
   const renderMovies = ({item}: {item: IMovie}) => {
     return (
-      <TouchableOpacity style={homeStyles.wrapper} onPress={goToDetail}>
+      <TouchableOpacity
+        style={homeStyles.wrapper}
+        onPress={() => goToDetail(item)}>
         <View style={homeStyles.card}>
           <Image
             style={homeStyles.wrapperImageContainer}
@@ -66,9 +74,12 @@ const HomeScreen = (props: any) => {
         refreshControl={
           <RefreshControl
             refreshing={props.loading}
-            onRefresh={props.fetchMovies}
+            onRefresh={() => props.fetchMovies(1)}
           />
         }
+        onEndReached={paginate}
+        onEndReachedThreshold={0.5}
+        initialNumToRender={4}
       />
     </Container>
   );
@@ -84,7 +95,8 @@ const mapStateToProps = (state: any) => {
 
 // Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
 const mapDispatchToProps = (dispatch: any) => ({
-  fetchMovies: () => dispatch(getMovies()),
+  fetchMovies: (page: number) => dispatch(getMovies(page)),
+  currentMovie: (movie: IMovie) => dispatch(setCurrentMovie(movie)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

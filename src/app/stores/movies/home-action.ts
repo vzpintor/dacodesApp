@@ -9,3 +9,8 @@ export const setLoading = (loading: boolean) => ({
   type: 'IS_LOADING',
   payload: loading,
 });
+
+export const setCurrentMovie = (movie: IMovie) => ({
+  type: 'CURRENT_MOVIE_ASSIGNED',
+  payload: movie,
+});
