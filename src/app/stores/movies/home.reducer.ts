@@ -1,4 +1,6 @@
-const INITIAL_STATE = {
+import {IMoviesState} from '@shared/interfaces/movie-interface';
+
+const INITIAL_STATE: IMoviesState = {
   listMovies: {
     movies: [],
     page: 1,
@@ -6,7 +8,7 @@ const INITIAL_STATE = {
     totalPage: 0,
   },
   loading: false,
-  currentMovie: null,
+  currentMovie: undefined,
 };
 
 export function homeReducer(state = INITIAL_STATE, action: any) {
