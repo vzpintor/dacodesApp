@@ -5,7 +5,7 @@ export const ITEM_WIDTH = Dimensions.get('window').width;
 export const SIZE = ITEM_WIDTH / 2 - 10;
 export const HEIGHT = SIZE * 2 - 95;
 
-export const homeSyles = StyleSheet.create({
+export const homeStyles = StyleSheet.create({
   wrapper: {
     paddingHorizontal: 5,
     marginBottom: 30,

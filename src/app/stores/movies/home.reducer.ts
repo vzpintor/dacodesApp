@@ -1,19 +1,25 @@
 const INITIAL_STATE = {
-  counter: 0,
+  listMovies: {
+    movies: [],
+    page: 0,
+    total: 0,
+    totalPage: 0,
+  },
+  loading: false,
 };
 
 export function homeReducer(state = INITIAL_STATE, action: any) {
   switch (action.type) {
-    case 'INCREASE_COUNTER': {
+    case 'FETCH_MOVIES_SUCCEEDED': {
       return {
         ...state,
-        counter: state.counter + 1,
+        listMovies: action.payload,
       };
     }
-    case 'DECREASE_COUNTER': {
+    case 'IS_LOADING': {
       return {
         ...state,
-        counter: state.counter - 1,
+        loading: action.payload,
       };
     }
     default:

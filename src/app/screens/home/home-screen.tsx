@@ -1,39 +1,52 @@
-import React from 'react';
-import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
-import {Container} from '../../shared/components/screen/screen.component';
-import {homeSyles} from '@screens/home/home-styles';
+import React, {useEffect} from 'react';
+import {
+  FlatList,
+  Image,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Container} from '@shared/components/screen/screen.component';
+import {homeStyles} from '@screens/home/home-styles';
 import {useNavigation} from '@react-navigation/native';
+import {connect} from 'react-redux';
+import {getMovies} from '@shared/services/movies-service';
+import {IMovie} from '@shared/interfaces/movie-interface';
 
-const HomeScreen = () => {
+const HomeScreen = (props: any) => {
   const navigation = useNavigation();
+
+  useEffect(() => {
+    props.fetchMovies();
+  }, []);
 
   const goToDetail = () => {
     navigation.navigate('detail');
   };
 
-  const renderMovies = ({item}) => {
+  const renderMovies = ({item}: {item: IMovie}) => {
     return (
-      <TouchableOpacity style={homeSyles.wrapper} onPress={goToDetail}>
-        <View style={homeSyles.card}>
+      <TouchableOpacity style={homeStyles.wrapper} onPress={goToDetail}>
+        <View style={homeStyles.card}>
           <Image
-            style={homeSyles.wrapperImageContainer}
+            style={homeStyles.wrapperImageContainer}
             source={{
-              uri:
-                'https://image.tmdb.org/t/p/w500/3ombg55JQiIpoPnXYb2oYdr6DtP.jpg',
+              uri: `https://image.tmdb.org/t/p/w500/${item.image}`,
             }}
           />
-          <View style={homeSyles.overlay}>
+          <View style={homeStyles.overlay}>
             <View>
-              <Text style={homeSyles.text}>{'Guasón'}</Text>
+              <Text style={homeStyles.text}>{item.title}</Text>
             </View>
-            <View style={homeSyles.overlayContainer}>
-              <Text style={homeSyles.text}>{'04-Oct-2019'}</Text>
-              <View style={homeSyles.voteAverage}>
+            <View style={homeStyles.overlayContainer}>
+              <Text style={homeStyles.text}>{item.date}</Text>
+              <View style={homeStyles.voteAverage}>
                 <Image
-                  style={homeSyles.star}
+                  style={homeStyles.star}
                   source={require('@images/star.png')}
                 />
-                <Text style={homeSyles.text}>{8.5}</Text>
+                <Text style={homeStyles.text}>{item.voteAverage}</Text>
               </View>
             </View>
           </View>
@@ -47,12 +60,31 @@ const HomeScreen = () => {
       <FlatList
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        data={[4, 2, 1, 2, 3, 4, 5, 6, 7, 8]}
+        data={props.listMovies.movies}
         renderItem={renderMovies}
         keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl
+            refreshing={props.loading}
+            onRefresh={props.fetchMovies}
+          />
+        }
       />
     </Container>
   );
 };
 
-export default HomeScreen;
+// Map State To Props (Redux Store Passes State To Component)
+const mapStateToProps = (state: any) => {
+  return {
+    listMovies: state.moviesReducer.listMovies,
+    loading: state.moviesReducer.loading,
+  };
+};
+
+// Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
+const mapDispatchToProps = (dispatch: any) => ({
+  fetchMovies: () => dispatch(getMovies()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
